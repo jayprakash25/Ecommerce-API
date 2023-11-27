@@ -1,13 +1,31 @@
-import express from "express";
+const express = require("express");
+const bodyParser = require("body-parser");
+const morgan = require("morgan");
+const { connectDB } = require("./connection");
+require("dotenv/config");
 
 const app = express();
+const port = 3000;
 
-app.get("/", (req, res) => {
-  res.send(
-    "Hey Developers! We made you develop your Ecommerce Web-App easily like never before through our API....Stay tuned...."
-  );
-});
+//middlewares
+app.use(bodyParser.json());
+app.use(morgan("tiny"));
 
-app.listen(3000, () => {
-  console.log("Server running on port; 3000");
+const api = process.env.API_URL;
+
+//Routes
+const productsRouter = require("./routers/products");
+const userRouter = require("./routers/users");
+const orderRouter = require("./routers/orders");
+const categroyRouter = require("./routers/categories");
+app.use(`${api}/products`, productsRouter);
+app.use(`${api}/user`, userRouter);
+app.use(`${api}/user/order`, orderRouter);
+app.use(`${api}/category`, categroyRouter);
+
+//CONNECT TO DATABASE
+connectDB(process.env.DB_URL);
+
+app.listen(port, () => {
+  console.log(`Server running on port: ${port}`);
 });
