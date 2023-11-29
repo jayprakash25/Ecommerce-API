@@ -7,7 +7,9 @@ const handleGet = async (req, res) => {
 };
 
 const handleGetOne = async (req, res) => {
-  const productList = await Product.findById(req.params.id);
+  const productList = await Product.findById(req.params.id).populate(
+    "category"
+  );
   if (!productList) return res.status(500).send("Product not Found");
   else res.send(productList);
 };

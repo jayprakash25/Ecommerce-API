@@ -4,10 +4,11 @@ const {
   handlePost,
   handleGet,
   handleDelete,
+  handlePut,
 } = require("../controller/categories");
 
 router.route("/").get(handleGet).post(handlePost);
 
-router.route("/:id").delete(handleDelete);
+router.route("/:id").put(handlePut).delete(handleDelete);
 
 module.exports = router;

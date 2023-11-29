@@ -19,6 +19,24 @@ const handlePost = async (req, res) => {
   return res.send(newCat);
 };
 
+const handlePut = async (req, res) => {
+  const category = await Category.findByIdAndUpdate(
+    req.params.id,
+    {
+      name: req.body.name,
+      color: req.body.color,
+    },
+    { new: true }
+  );
+
+  if (!category)
+    return res
+      .status(400)
+      .json({ success: true, message: "Error updating category" });
+
+  res.send(category);
+};
+
 const handleDelete = (req, res) => {
   Category.deleteOne({ _id: req.params.id })
     .then(() => {
@@ -31,4 +49,4 @@ const handleDelete = (req, res) => {
     });
 };
 
-module.exports = { handlePost, handleGet, handleDelete };
+module.exports = { handlePost, handleGet, handleDelete, handlePut };
