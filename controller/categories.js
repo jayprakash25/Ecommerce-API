@@ -32,7 +32,7 @@ const handlePut = async (req, res) => {
   if (!category)
     return res
       .status(400)
-      .json({ success: true, message: "Error updating category" });
+      .json({ success: false, message: "Error updating category" });
 
   res.send(category);
 };
