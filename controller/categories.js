@@ -1,4 +1,5 @@
 const { Category } = require("../models/category");
+const mongoose = require("mongoose");
 
 const handleGet = async (req, res) => {
   const categoryList = await Category.find();
@@ -20,6 +21,9 @@ const handlePost = async (req, res) => {
 };
 
 const handlePut = async (req, res) => {
+  if (!mongoose.isValidObjectId(req.params.id)) {
+    return res.status(400).send("Invalid Category");
+  }
   const category = await Category.findByIdAndUpdate(
     req.params.id,
     {

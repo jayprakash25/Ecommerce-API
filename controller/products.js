@@ -1,5 +1,6 @@
 const Product = require("../models/product");
 const { Category } = require("../models/category");
+const mongoose = require("mongoose");
 
 const handleGet = async (req, res) => {
   const productList = await Product.find();
@@ -49,6 +50,9 @@ const handlePost = async (req, res) => {
 };
 
 const handlePut = async (req, res) => {
+  if (!mongoose.isValidObjectId(req.params.id)) {
+    return res.status(400).send("Invalid Product Id");
+  }
   const category = await Category.findById(req.body.category);
 
   if (!category) return res.status(400).send("Invalid Category");
@@ -77,4 +81,22 @@ const handlePut = async (req, res) => {
   res.send(newproduct);
 };
 
-module.exports = { handleGet, handlePost, handleGetOne, handlePut };
+const handleDelete = (req, res) => {
+  Product.deleteOne({ _id: req.params.id })
+    .then(() => {
+      res.status(200).json({ success: true, message: "Deleted" });
+    })
+    .catch((err) => {
+      res
+        .status(400)
+        .json({ success: false, message: "Error deleting the category" });
+    });
+};
+
+module.exports = {
+  handleGet,
+  handlePost,
+  handleGetOne,
+  handlePut,
+  handleDelete,
+};

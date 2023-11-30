@@ -5,10 +5,11 @@ const {
   handlePost,
   handleGetOne,
   handlePut,
+  handleDelete,
 } = require("../controller/products");
 
 router.route("/").get(handleGet).post(handlePost);
 
-router.route("/:id").get(handleGetOne).put(handlePut);
+router.route("/:id").get(handleGetOne).put(handlePut).delete(handleDelete);
 
 module.exports = router;
