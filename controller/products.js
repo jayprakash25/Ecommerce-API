@@ -52,7 +52,7 @@ const handlePut = async (req, res) => {
   const category = await Category.findById(req.body.category);
 
   if (!category) return res.status(400).send("Invalid Category");
-  const product = Product.findByIdAndUpdate(
+  const newproduct = await Product.findByIdAndUpdate(
     req.params.id,
     {
       name: req.body.name,
@@ -69,12 +69,12 @@ const handlePut = async (req, res) => {
     { new: true }
   );
 
-  if (!product)
+  if (!newproduct)
     return res
       .status(500)
       .json({ success: false, message: "Error updating the product" });
 
-  res.send(product);
+  res.send(newproduct);
 };
 
 module.exports = { handleGet, handlePost, handleGetOne, handlePut };
