@@ -3,7 +3,16 @@ const { Category } = require("../models/category");
 const mongoose = require("mongoose");
 
 const handleGet = async (req, res) => {
-  const productList = await Product.find();
+  let filter = [];
+
+  if (req.query.categories) {
+    filter = req.query.categories.split(",");
+  }
+
+  const productList = await Product.find({ category: filter });
+
+  if (!productList) return res.status(500).send("No products found");
+
   res.send(productList);
 };
 
@@ -93,10 +102,21 @@ const handleDelete = (req, res) => {
     });
 };
 
+const getCount = async (req, res) => {
+  const productCount = await Product.countDocuments();
+
+  if (!productCount) return res.status(500).json({ success: false });
+
+  res.send({
+    count: productCount,
+  });
+};
+
 module.exports = {
   handleGet,
   handlePost,
   handleGetOne,
   handlePut,
   handleDelete,
+  getCount,
 };
