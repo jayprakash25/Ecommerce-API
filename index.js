@@ -2,6 +2,8 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const morgan = require("morgan");
 const { connectDB } = require("./connection");
+const authJwt = require("./helpers/jwt");
+const errorHandler = require("./helpers/errHandler");
 require("dotenv/config");
 
 const app = express();
@@ -10,6 +12,8 @@ const port = 3000;
 //middlewares
 app.use(bodyParser.json());
 app.use(morgan("tiny"));
+app.use(authJwt());
+app.use(errorHandler);
 
 const api = process.env.API_URL;
 
