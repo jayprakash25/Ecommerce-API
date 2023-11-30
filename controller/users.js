@@ -70,4 +70,14 @@ const handleLogin = async (req, res) => {
   }
 };
 
-module.exports = { handleGet, handlePost, handleGetOne, handleLogin };
+const getCount = async (req, res) => {
+  const userCount = await User.countDocuments();
+
+  if (!userCount) return res.status(500).json({ success: false });
+
+  res.send({
+    count: userCount,
+  });
+};
+
+module.exports = { handleGet, handlePost, handleGetOne, handleLogin, getCount };
