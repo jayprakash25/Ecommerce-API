@@ -4,12 +4,14 @@ const mongoose = require("mongoose");
 
 const handleGet = async (req, res) => {
   let filter = [];
+  let productList;
 
   if (req.query.categories) {
     filter = req.query.categories.split(",");
+    productList = await Product.find({ category: filter });
+  } else {
+    productList = await Product.find();
   }
-
-  const productList = await Product.find({ category: filter });
 
   if (!productList) return res.status(500).send("No products found");
 

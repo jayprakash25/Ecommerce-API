@@ -56,9 +56,13 @@ const handleLogin = async (req, res) => {
   if (!user) return res.status(400).send("User not Found.");
 
   if (user && bcrypt.compareSync(req.body.password, user.passwordHash)) {
-    const token = jwt.sign({ userId: user._id }, process.env.secret, {
-      expiresIn: "1d",
-    });
+    const token = jwt.sign(
+      { userId: user._id, isAdmin: user.isAdmin },
+      process.env.secret,
+      {
+        expiresIn: "1d",
+      }
+    );
 
     res.status(201).send({ user: user.email, token: token });
   } else {
