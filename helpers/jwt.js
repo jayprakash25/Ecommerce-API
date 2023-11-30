@@ -19,14 +19,6 @@ const authJwt = () => {
   });
 };
 
-// const isRevoked = async (req, payload, done) => {
-//   console.log(payload);
-//   if (payload.isAdmin == true) {
-//     done();
-//   } else {
-//     done(null, true);
-//   }
-// };
 async function isRevoked(req, token) {
   if (!token.payload.isAdmin) {
     return true;

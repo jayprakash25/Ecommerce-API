@@ -17,7 +17,7 @@ const handleGetOne = async (req, res) => {
   if (!mongoose.isValidObjectId(req.params.id))
     return res.status(400).send("Invalid User, User not found.");
   const userList = await User.findById(req.params.id).select("-passwordHash");
-  if (!userList) return res.status(500).send("Product not Found");
+  if (!userList) return res.status(500).send("User not Found");
   else res.send(userList);
 };
 
@@ -39,7 +39,7 @@ const handlePost = async (req, res) => {
       if (!newUser)
         return res
           .status(400)
-          .json({ message: "Error creating product...", success: false });
+          .json({ message: "Error creating User...", success: false });
 
       return res.status(201).send(newUser);
     })
@@ -80,4 +80,18 @@ const getCount = async (req, res) => {
   });
 };
 
-module.exports = { handleGet, handlePost, handleGetOne, handleLogin, getCount };
+const handleDelete = async (req, res) => {
+  const user = await User.deleteOne({ _id: req.params.id });
+  if (!user) return res.status(400).send("Error deleting user...");
+
+  res.send("User deleted successfully");
+};
+
+module.exports = {
+  handleGet,
+  handlePost,
+  handleGetOne,
+  handleLogin,
+  getCount,
+  handleDelete,
+};
