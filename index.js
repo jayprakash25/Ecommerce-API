@@ -12,7 +12,7 @@ const port = 3000;
 //middlewares
 app.use(bodyParser.json());
 app.use(morgan("tiny"));
-app.use(authJwt());
+// app.use(authJwt());
 app.use(errorHandler);
 
 const api = process.env.API_URL;
@@ -26,7 +26,7 @@ const {
 } = require("./routers/index");
 app.use(`${api}/products`, productsRouter);
 app.use(`${api}/user`, userRouter);
-app.use(`${api}/user/order`, orderRouter);
+app.use(`${api}/order`, orderRouter);
 app.use(`${api}/category`, categroyRouter);
 
 //CONNECT TO DATABASE

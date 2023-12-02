@@ -1,10 +1,10 @@
 const express = require("express");
 const router = express.Router();
-const { order } = require("../models/order");
+const { handleGet, handlePost } = require("../controller/orders");
+const { handleGetOne } = require("../controller/orders");
 
-router.get("/", async (req, res) => {
-  const ordersList = await order.find();
-  res.send(ordersList);
-});
+router.route("/").get(handleGet).post(handlePost);
+
+router.route("/:id").get(handleGetOne);
 
 module.exports = router;

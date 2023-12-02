@@ -22,10 +22,11 @@ const handleGetOne = async (req, res) => {
 };
 
 const handlePost = async (req, res) => {
+  var salt = bcrypt.genSaltSync(10);
   const user = new User({
     name: req.body.name,
     email: req.body.email,
-    passwordHash: bcrypt.hashSync(req.body.password, 10),
+    passwordHash: bcrypt.hashSync(req.body.password, salt),
     phone: req.body.phone,
     isAdmin: req.body.isAdmin,
     zip: req.body.zip,
