@@ -22,7 +22,7 @@ const handleGetOne = async (req, res) => {
       populate: { path: "product", populate: "category" },
     });
 
-  if (!orderList) return res.status(500).send("No products found");
+  if (!orderList) return res.status(500).send("No Orders found");
 
   res.send(orderList);
 };
@@ -93,7 +93,7 @@ const handleStatus = async (req, res) => {
 const handleDelete = async (req, res) => {
   order
     .deleteOne({ _id: req.params.id })
-    .then(async (order) => {
+    .then(async () => {
       if (order) {
         await order.orderItems.map(async (item) => {
           await orderItem.deleteOne(item);
