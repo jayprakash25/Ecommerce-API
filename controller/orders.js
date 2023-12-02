@@ -93,7 +93,7 @@ const handleStatus = async (req, res) => {
 const handleDelete = async (req, res) => {
   order
     .deleteOne({ _id: req.params.id })
-    .then(async () => {
+    .then(async (order) => {
       if (order) {
         await order.orderItems.map(async (item) => {
           await orderItem.deleteOne(item);
