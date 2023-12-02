@@ -77,6 +77,44 @@ const handleStatus = async (req, res) => {
   if (!mongoose.isValidObjectId(req.params.id)) {
     return res.status(400).send("Invalid Order Id");
   }
+  const newOrder = await order.findByIdAndUpdate(
+    req.params.id,
+    {
+      status: req.body.status,
+    },
+    { new: true }
+  );
+
+  if (!newOrder) return res.status(500).send("Couldn't update order status...");
+
+  res.send(newOrder);
 };
 
-module.exports = { handleGet, handlePost, handleGetOne };
+const handleDelete = async (req, res) => {
+  order
+    .deleteOne({ _id: req.params.id })
+    .then(async (order) => {
+      if (order) {
+        await order.orderItems.map(async (item) => {
+          await orderItem.deleteOne(item);
+        });
+
+        return res.status(200).send("Order deleted..");
+      } else {
+        return res.status(404).send("Error deleting order");
+      }
+    })
+    .catch((err) => {
+      res
+        .status(400)
+        .json({ success: false, message: `Error deleting the order : ${err}` });
+    });
+};
+
+module.exports = {
+  handleGet,
+  handlePost,
+  handleGetOne,
+  handleStatus,
+  handleDelete,
+};
