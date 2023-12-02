@@ -3,18 +3,18 @@ const { orderItem } = require("../models/orderItem");
 const mongoose = require("mongoose");
 
 const handleGet = async (req, res) => {
-  const orderList = await order
+  const userOrderList = await order
     .find()
     .populate("user", "name")
     .sort({ dateOrdered: -1 });
 
-  if (!orderList) return res.status(500).send("No products found");
+  if (!userOrderList) return res.status(500).send("No products found");
 
-  res.send(orderList);
+  res.send(userOrderList);
 };
 
 const handleGetOne = async (req, res) => {
-  const orderList = await order
+  const userOrderList = await order
     .findById(req.params.id)
     .populate("user", "name")
     .populate({
@@ -22,9 +22,23 @@ const handleGetOne = async (req, res) => {
       populate: { path: "product", populate: "category" },
     });
 
-  if (!orderList) return res.status(500).send("No Orders found");
+  if (!userOrderList) return res.status(500).send("No Orders found");
 
-  res.send(orderList);
+  res.send(userOrderList);
+};
+
+const handleUserOrders = async (req, res) => {
+  const userOrderList = await order
+    .find({ user: req.params.userid })
+    .populate({
+      path: "orderItems",
+      populate: { path: "product", populate: "category" },
+    })
+    .sort({ dateOrdered: -1 });
+
+  if (!userOrderList) return res.status(500).send("Error");
+
+  res.send(userOrderList);
 };
 
 const handlePost = async (req, res) => {
